@@ -83,9 +83,13 @@ Some limitations:
 If opencv cant open window try: ```pip install opencv-contrib-python```
 
 If networks cant be initialised after downloading as zip, 
-try downloading the models seperately from here, 
-these are the pretrained opencv examples which are taken from (https://github.com/clovaai/deep-text-recognition-benchmark),
+try downloading the models seperately from below, 
+
+these are the pretrained opencv examples which are taken from 
+(https://github.com/clovaai/deep-text-recognition-benchmark),
+
 (https://drive.google.com/drive/folders/1cTbQ3nuZG-EKWak6emD_s8_hHXWz7lAr)
+
 and the DB detection models here
 (https://drive.google.com/drive/folders/1qzNCHfUJOS0NEUOIKn69eCtxdlNPpWbq)
 

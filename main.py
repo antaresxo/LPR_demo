@@ -204,7 +204,7 @@ def main():
             width = np.linalg.norm(quadrangle_np[1] - quadrangle_np[2])
             #print("differential ", width , height) # for adjusting threshhold!
             if width < 100 or height < 30:
-                cv.putText(frame, "FILTERED", (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0))
+                cv.putText(frame, "NOT A PLATE", (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0))
                 continue
 
             cropped = fourPointsTransform(frame, quadrangle_np)

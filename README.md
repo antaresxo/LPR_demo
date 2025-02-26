@@ -73,6 +73,12 @@ GUI Integration: To display real-time logs and allow manual validation along wit
 
 Actually check active tickets through some parking API. 
 
+Some limitations:
+    Very rudimentary skipping of frames to speed up testing
+    Handle edgecases with custom license plates
+    Handle up close reads of plates where two text boxes are recognized
+
+
 ## Troubleshooting
 If opencv cant open window try: ```pip install opencv-contrib-python```
 

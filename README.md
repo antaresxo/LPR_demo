@@ -3,12 +3,12 @@ This project implements a real-time license plate recognition system using deep 
 
 ## Dependencies, setup and usage
 It is recommended to use git with support for files larger than 100MB,
-1
-    git clone https://github.com/antaresxo/LPR_demo
-2
-    git install git-lfs
-3
-    git pull
+
+```git clone https://github.com/antaresxo/LPR_demo```
+
+```git install git-lfs```
+
+```git pull```
 
 and make sure everything is pulled with ResNet_CTC being 170MB!
 
@@ -91,6 +91,7 @@ these are the pretrained opencv examples which are taken from
 (https://drive.google.com/drive/folders/1cTbQ3nuZG-EKWak6emD_s8_hHXWz7lAr)
 
 and the DB detection models here
+
 (https://drive.google.com/drive/folders/1qzNCHfUJOS0NEUOIKn69eCtxdlNPpWbq)
 
 Or just download everything through git clone.

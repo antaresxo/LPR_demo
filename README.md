@@ -1,6 +1,13 @@
 ### LPR_demo
 This project implements a real-time license plate recognition system using deep learning models for text detection and recognition. The pipeline is designed for modularity, allowing easy replacement of models or adaptation to different datasets.
 
+# Dependencies
+To perform a test run, install dependencies and run main from project folder.
+```pip install -r requirements.txt```
+Most imports in main.py are built-in, but these external libraries are required:
+    numpy
+    opencv-python
+
 ## Folder structure
 project_root/
 │── models/                  # Contains detection and recognition ONNX models
@@ -38,4 +45,12 @@ Filtering & Validation:
 
     The final result is stored in numberplates.csv and numberplates.db along with time logged.
 
+# Future improvements
+Confidence-Based Filtering: Instead of just counting repeated reads, implement confidence-based filtering using OCR scores.
+
+Better preprocessing to function even in snow heavy enviroments. Could include augmented datasets, different model structures or another approach for character recognition.
+
+GUI Integration: To display real-time logs and allow manual validation along with being more userfriendly.
+
+Actually check active tickets through some parking API. 
 

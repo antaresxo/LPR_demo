@@ -1,7 +1,7 @@
-### LPR_demo
+# LPR_demo
 This project implements a real-time license plate recognition system using deep learning models for text detection and recognition. The pipeline is designed for modularity, allowing easy replacement of models or adaptation to different datasets.
 
-# Dependencies
+## Dependencies
 To perform a test run, install dependencies and run main from project folder.
 ```pip install -r requirements.txt```
 Most imports in main.py are built-in, but these external libraries are required:
@@ -9,18 +9,20 @@ Most imports in main.py are built-in, but these external libraries are required:
     opencv-python
 
 ## Folder structure
-project_root/
-│── models/                  # Contains detection and recognition ONNX models
-│   ├── DB_TD500_resnet50.onnx
-│   ├── ResNet_CTC.onnx
-│── reference_material/      # Stores sample footage and test images
-│── numberplates.csv         # Log of recognized license plates (generated at runtime)
-│── numberplates.db          # SQLite database storing recognized plates (generated at runtime)
-│── main.py                  # Core pipeline execution
-│── requirements.txt         # Dependencies
-│── README.txt               # This file
+```
+    project_root/
+    │── models/                  # Contains detection and recognition ONNX models
+    │   ├── DB_TD500_resnet50.onnx
+    │   ├── ResNet_CTC.onnx
+    │── reference_material/      # Stores sample footage and test images
+    │── numberplates.csv         # Log of recognized license plates (generated at runtime)
+    │── numberplates.db          # SQLite database storing recognized plates (generated at runtime)
+    │── main.py                  # Core pipeline execution
+    │── requirements.txt         # Dependencies
+    │── README.txt               # This file
+```
 
-# Pipeline overview
+## Pipeline overview
 Frame Extraction: Reads frames from a video feed or static images.
 
 Text Detection (DB Model):
@@ -45,7 +47,7 @@ Filtering & Validation:
 
     The final result is stored in numberplates.csv and numberplates.db along with time logged.
 
-# Future improvements
+## Future improvements
 Confidence-Based Filtering: Instead of just counting repeated reads, implement confidence-based filtering using OCR scores.
 
 Better preprocessing to function even in snow heavy enviroments. Could include augmented datasets, different model structures or another approach for character recognition.

@@ -1,21 +1,27 @@
 # LPR_demo
 This project implements a real-time license plate recognition system using deep learning models for text detection and recognition. The pipeline is designed for modularity, allowing easy replacement of models or adaptation to different datasets.
 
-## Dependencies and setup
+## Dependencies, setup and usage
 It is recommended to use git with support for files larger than 100MB,
-```git clone https://github.com/antaresxo/LPR_demo```
-```git install git-lfs```
-```git pull```
+
+    ```git clone https://github.com/antaresxo/LPR_demo```
+
+    ```git install git-lfs```
+    
+    ```git pull```
+
 and make sure everything is pulled with ResNet_CTC being 170MB!
 
 To perform a test run, install dependencies and run main from project folder.
-```pip install -r requirements.txt```
+    ```pip install -r requirements.txt```
 Most imports in main.py are built-in, but these external libraries are required:
     numpy
     opencv-python
 
 To run, just do
-````python main.py```
+    ````python main.py```
+
+To close press Q !
 
 NOTE: If you want to set webcam as the video input, change the path of the cv videostream to 0.
 
@@ -79,6 +85,7 @@ and the DB detection models here
 
 Or just download everything through git clone.
 OBS !!! Really make sure to ```git install git-lfs``` 
+verify ```git lfs install```
 
 ## Final words
 This concludes the Norrspect.ai X T4 Innovation Group collaboration!

@@ -76,7 +76,8 @@ Actually check active tickets through some parking API.
 Some limitations:
     Very rudimentary skipping of frames to speed up testing
     Handle edgecases with custom license plates
-    Handle up close reads of plates where two text boxes are recognized
+    Handle up close reads of plates where two text boxes are recognized, duct tape fix at the moment
+    Better showcase and switching between singular and all test videos 
 
 
 ## Troubleshooting

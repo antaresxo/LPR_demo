@@ -124,16 +124,19 @@ def data_filtering(plate, max_time_minutes=2, min_scans=3):
     
     return None  # Return None if the plate is not valid
 
-
 def main():
 
     # Create a new named window
     kWinName = "DB_TD500_resnet50 + ResNet_CTC"
     cv.namedWindow(kWinName, cv.WINDOW_NORMAL)
 
-    # videostream
-    #stream = cv.VideoCapture("screen-20250202-172512~2.mp4")
-    stream = cv.VideoCapture("./reference_material/VID_20250214114317927.mp4")
+    # videostream selection (crude)
+    isUsingWebcam : bool = True
+    stream : cv.VideoCapture
+    if isUsingWebcam:
+        stream = cv.VideoCapture(0)
+    else: 
+        stream = cv.VideoCapture("./reference_material/VID_20250214114317927.mp4")
 
     ### DETECTOR ###
     detector = cv.dnn.TextDetectionModel_DB("./models/DB_TD500_resnet50.onnx")
@@ -171,11 +174,9 @@ def main():
 
     recognizer.setInputParams(recScale, recInputSize, recMean)
 
-    # gui
-    # logger
-    # datafiltering
-
-
+    # gui?
+    # duct tape fix for detecting two boxes on a plate!! 
+    lastRecResult = ""
     # fps
     tickmeter = cv.TickMeter()
     count = 0 # speedup
@@ -204,7 +205,7 @@ def main():
             width = np.linalg.norm(quadrangle_np[1] - quadrangle_np[2])
             #print("differential ", width , height) # for adjusting threshhold!
             if width < 100 or height < 30:
-                cv.putText(frame, "NOT A PLATE", (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0))
+                cv.putText(frame, "NOT A PLATE", (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 1, (255, 127, 0))
                 continue
 
             cropped = fourPointsTransform(frame, quadrangle_np)
@@ -218,17 +219,26 @@ def main():
             tickmeter.start()
             recResult = recognizer.recognize(cropped) # or blob 
             tickmeter.stop()
-
-            print(recResult)
-
+          
             cv.putText(frame, recResult, (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0))
 
-            # pass it along the rest of the pipeline
-            if validate_license_plate(recResult):
-                if (data_filtering(recResult) is not None):
-                    log_numberplate_read(recResult)
-                    export_to_csv("numberplates.csv")
-                    # gui 
+            print(recResult)
+            
+            # handle edgecase: if demo recognizes a numberplate as two text boxes
+            if isUsingWebcam and len(recResult)<5 and len(lastRecResult)<5:
+                print("edgecase detected: ", lastRecResult + recResult)
+                if validate_license_plate(lastRecResult+recResult):
+                    if (data_filtering(lastRecResult+recResult) is not None):
+                        log_numberplate_read(lastRecResult+recResult)
+                        export_to_csv("numberplates.csv")     
+                        lastRecResult = recResult
+            else:
+                # pass it along the rest of the pipeline
+                if validate_license_plate(recResult):
+                    if (data_filtering(recResult) is not None):
+                        log_numberplate_read(recResult)
+                        export_to_csv("numberplates.csv")
+                        # gui 
 
             
 

@@ -187,15 +187,19 @@ def main():
             cv.waitKey()
             break
 
+        # for faster playback of material
         count = count + 1
-        if count % 20 != 0:
+        if count % 20 != 0 and not isUsingWebcam:
             continue
+
+        # just making sure that drawn elements dont get sent to models 
+        frame_with_elements = frame.copy()
 
         tickmeter.start()
         detResults = detector.detect(frame)
         tickmeter.stop()
 
-        cv.polylines(frame, detResults[0], True, (0, 255, 0), 2)
+        cv.polylines(frame_with_elements, detResults[0], True, (0, 255, 0), 2)
 
         for quadrangle in detResults[0]:
             quadrangle_np = np.array(quadrangle, dtype=np.float32)
@@ -205,7 +209,7 @@ def main():
             width = np.linalg.norm(quadrangle_np[1] - quadrangle_np[2])
             #print("differential ", width , height) # for adjusting threshhold!
             if width < 100 or height < 30:
-                cv.putText(frame, "NOT A PLATE", (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 1, (255, 127, 0))
+                cv.putText(frame_with_elements, "NOT A PLATE", (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 1, (255, 127, 0))
                 continue
 
             cropped = fourPointsTransform(frame, quadrangle_np)
@@ -214,24 +218,24 @@ def main():
             # Resize to (100, 32) before CRNN
             cropped = cv.resize(cropped, (100, 32))
 
-            cv.imshow("fourPointsTransform + Grayscale", cropped)
+            #cv.imshow("fourPointsTransform + Grayscale", cropped)
 
             tickmeter.start()
             recResult = recognizer.recognize(cropped) # or blob 
             tickmeter.stop()
           
-            cv.putText(frame, recResult, (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0))
+            cv.putText(frame_with_elements, recResult, (int(quadrangle[1][0]), int(quadrangle[1][1])) , cv.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0))
 
             print(recResult)
             
-            # handle edgecase: if demo recognizes a numberplate as two text boxes
-            if isUsingWebcam and len(recResult)<5 and len(lastRecResult)<5:
-                print("edgecase detected: ", lastRecResult + recResult)
-                if validate_license_plate(lastRecResult+recResult):
-                    if (data_filtering(lastRecResult+recResult) is not None):
-                        log_numberplate_read(lastRecResult+recResult)
+            # "handle" edgecase: if demo recognizes a numberplate as two text boxes
+            if isUsingWebcam and len(recResult)==3 and len(lastRecResult)==3:
+                formatedResult = lastRecResult + recResult
+                print("edgecase detected: ", formatedResult)
+                if validate_license_plate(formatedResult):
+                    if (data_filtering(formatedResult) is not None):
+                        log_numberplate_read(formatedResult)
                         export_to_csv("numberplates.csv")     
-                        lastRecResult = recResult
             else:
                 # pass it along the rest of the pipeline
                 if validate_license_plate(recResult):
@@ -239,15 +243,16 @@ def main():
                         log_numberplate_read(recResult)
                         export_to_csv("numberplates.csv")
                         # gui 
+            lastRecResult = recResult
 
             
 
         # Put efficiency information
         label = 'Inference time: %.2f ms' % (tickmeter.getTimeMilli())
-        cv.putText(frame, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0))
+        cv.putText(frame_with_elements, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0))
 
         # Display the frame
-        cv.imshow(kWinName, frame)
+        cv.imshow(kWinName, frame_with_elements)
         tickmeter.reset()
 
 
